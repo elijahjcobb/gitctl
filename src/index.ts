@@ -22,4 +22,66 @@
  *
  */
 
-console.log("Hello, world!");
+import * as Express from "express";
+import * as HTTPS from "https";
+import * as FileSystem from "fs";
+import * as Path from "path";
+import { ObjectType, StandardType } from "typit";
+
+function throwError(msg: string): void {
+
+	console.error(msg);
+	process.exit(1);
+
+}
+
+type Config = {
+	serviceName: string;
+	port: number;
+	secret: string;
+	publicKey: string;
+	privateKey: string;
+};
+
+
+const configFilePathRaw: string | undefined = process.argv[2];
+if (!configFilePathRaw) throwError("You must supply a file path.");
+const configFilePath: string = Path.resolve(configFilePathRaw);
+console.log(configFilePath);
+if (!FileSystem.existsSync(configFilePath)) throwError("There is no config file at the path provided.");
+const fileData: Buffer | undefined = FileSystem.readFileSync(configFilePath);
+if (fileData === undefined) throwError("Could not get config file data for the path provided.");
+let config: Config | undefined;
+try {
+	config = JSON.parse(fileData.toString("utf8"));
+} catch (e) {
+	throwError("Could not decode config file for the path provided.");
+}
+
+if (config) {
+
+	new ObjectType({
+		serviceName: StandardType.STRING,
+		port: StandardType.NUMBER,
+		secret: StandardType.STRING,
+		publicKey: StandardType.STRING,
+		privateKey: StandardType.STRING
+	}).checkConformity(config);
+
+	let app: Express.Application = Express();
+
+	let server: HTTPS.Server = new HTTPS.Server({
+		key: config.privateKey,
+		cert: config.publicKey
+	}, app);
+
+	app.get("/", ((req: Express.Request, res: Express.Response): void => {
+
+		console.log(req.headers["X-Hub-Signature"]);
+
+	}));
+
+	server.listen(config.port);
+
+
+} else throwError("Could not parse config file.");

@@ -25,7 +25,8 @@
 	},
 	"homepage": "https://github.com/elijahjcobb/gitctl#readme",
 	"dependencies": {
-		"express": "latest"
+		"express": "latest",
+		"typit": "latest"
 	},
 	"devDependencies": {
 		"tslint": "latest",
