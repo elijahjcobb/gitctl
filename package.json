@@ -1,0 +1,39 @@
+{
+	"name": "@elijahjcobb/gitctl",
+	"version": "0.0.0",
+	"description": "",
+	"main": "dist/index",
+	"types": "dist/index",
+	"scripts": {
+		"prepublishOnly": "npm run compile",
+		"compile": "npm run clean && /usr/local/bin/tsc -p tsconfig.json",
+		"watch": "tsc -w -p .",
+		"clean": "rm -rf dist"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/elijahjcobb/gitctl.git"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"keywords": [],
+	"author": "Elijah Cobb <elijah@elijahcobb.com> (https://elijahcobb.com/)",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/elijahjcobb/gitctl/issues"
+	},
+	"homepage": "https://github.com/elijahjcobb/gitctl#readme",
+	"dependencies": {
+		"express": "latest"
+	},
+	"devDependencies": {
+		"tslint": "latest",
+		"typescript": "latest",
+		"@types/node": "latest",
+		"@types/express": "latest"
+	},
+	"files": [
+		"dist"
+	]
+}
