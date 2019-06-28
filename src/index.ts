@@ -75,8 +75,9 @@ if (config) {
 		cert: config.publicKey
 	}, app);
 
-	app.get("/", ((req: Express.Request, res: Express.Response): void => {
+	app.post("/", ((req: Express.Request, res: Express.Response): void => {
 
+		console.log(req.body["action"]);
 		console.log(req.headers["X-Hub-Signature"]);
 
 	}));
